@@ -7,7 +7,7 @@ import { BaseService } from '../../shared/services/base.service';
 @Injectable({
     providedIn: 'root'
 })
-export class ServiceNameService {
+export class UserService {
 
     private _user: ReplaySubject<User> = new ReplaySubject<User>(1);
 
