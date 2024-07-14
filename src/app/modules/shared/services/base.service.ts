@@ -8,10 +8,13 @@ export class BaseService {
 
     private readonly apiUrl = environment.API_BASE_URL
 
-    private readonly _header = new HttpHeaders().set(
-        'Authorization',
-        'Bearer ' + sessionStorage.getItem('accessToken')
-    );
+    private getHeaders(): HttpHeaders {
+        const token = sessionStorage.getItem('accessToken');
+        if (token) {
+            return new HttpHeaders().set('Authorization', 'Bearer ' + token);
+        }
+        return new HttpHeaders();
+    }
 
     constructor(protected http: HttpClient) { }
 
@@ -30,18 +33,20 @@ export class BaseService {
 
     getWithParams = <T>(url: string, params: PaginationParams) => {
         const stringParams = this.convertParamsToString(params);
-        return this.http.get<T>(this.MakeUrl(url), { headers: this._header, params: stringParams });
+        return this.http.get<T>(this.MakeUrl(url), { headers: this.getHeaders(), params: stringParams });
     }
 
-    get = <T>(url: string, model?: any) =>
-        this.http.get<T>(this.MakeUrl(url), { headers: this._header, params: model })
+    get = <T>(url: string, model?: any) => {
+        console.log('header : ', this.getHeaders());
+        return this.http.get<T>(this.MakeUrl(url), { headers: this.getHeaders(), params: model })
+    }
 
     post = <T>(url: string, model: any) =>
-        this.http.post<T>(this.MakeUrl(url), model, { headers: this._header });
+        this.http.post<T>(this.MakeUrl(url), model, { headers: this.getHeaders() });
 
     put = <T>(url: string, id: number, model: any) =>
-        this.http.put<T>(this.MakeUrl(`${url}/${id}`), model, { headers: this._header });
+        this.http.put<T>(this.MakeUrl(`${url}/${id}`), model, { headers: this.getHeaders() });
 
     delete = <T>(url: string, id: number) =>
-        this.http.delete<T>(this.MakeUrl(`${url}/${id}`), { headers: this._header });
+        this.http.delete<T>(this.MakeUrl(`${url}/${id}`), { headers: this.getHeaders() });
 }

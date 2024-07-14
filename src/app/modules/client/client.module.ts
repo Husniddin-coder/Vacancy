@@ -16,8 +16,6 @@ import { ApplicationListComponent } from './components/applications/application-
   declarations: [
     ClientComponent,
     HeaderComponent,
-    VacancyListComponent,
-    VacancyCardComponent,
     ApplicationListComponent,
 
   ],

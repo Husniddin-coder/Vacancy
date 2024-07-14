@@ -9,8 +9,10 @@ const routes: Routes = [
     path: '',
     component: ClientComponent,
     children: [
-      { path: 'vacancy-list', component: VacancyListComponent },
-      { path: 'application-list', component: ApplicationListComponent },
+      {
+        path: '',
+        loadChildren: () => import('./components/vacancies/vacancy.module').then(m => m.VacancyModule)
+      },
     ]
   },
 ];

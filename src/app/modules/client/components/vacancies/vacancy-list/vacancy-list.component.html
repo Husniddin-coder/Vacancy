@@ -1,10 +1,63 @@
-<div class="flex ml-20 mr-20 mt-10">
-  <div>
-    <h1 class="text-3xl font-extrabold text-slate-900 ">All Vacancies: {{total}}</h1>
+<div class="ml-6 mr-6 mt-6 lg:ml-24 lg:mr-20 lg:mt-10">
+  <div class="block">
+    <h1 class="text-2xl lg:text-3xl font-extrabold text-slate-900">
+      All Vacancies: {{(totalVacancies$ | async)}}
+    </h1>
+    <div class="mt-6 mb-6 lg:mt-10 lg:mb-10">
+      <form class="space-x-2" [formGroup]="formGroup">
+        <p-multiSelect (onClick)="collectAsString(this.formGroup.get('selectedRegions')?.value)"
+          class="w-full lg:w-56 text-sm" defaultLabel="Select a Region" [options]="(regionNames$ | async) ?? []"
+          formControlName="selectedRegions" optionLabel="name">
+          <ng-template pTemplate="header">
+            <div class="flex items-center justify-between">
+              <button class="mr-2" (click)="toggleSortOrderForRegion()">
+                <i [class]="sortOrder === 'asc' ? 'pi pi-sort-amount-up-alt' : 'pi pi-sort-amount-down'"></i>
+              </button>
+            </div>
+          </ng-template>
+        </p-multiSelect>
+        <p-multiSelect class="w-full lg:w-54 text-sm mt-4 lg:mt-0" defaultLabel="Select a Company"
+          [options]="(companyNames$ | async) ?? []" formControlName="selectedCompanies" optionLabel="name"
+          (onChange)="collectAsString(formGroup.get('selectedCompanies')?.value)">
+          <ng-template pTemplate="header">
+            <div class="flex items-center justify-between">
+              <button class="mr-2" (click)="toggleSortOrderForCompany()">
+                <i [class]="sortOrder === 'asc' ? 'pi pi-sort-amount-up-alt' : 'pi pi-sort-amount-down'"></i>
+              </button>
+            </div>
+          </ng-template>
+        </p-multiSelect>
+      </form>
+    </div>
+    <p-divider></p-divider>
   </div>
-  <div class="mr-10 bg-slate-100">
-    Filter
+  <div class="flex mt-8">
+    <div class="hidden lg:block lg:mb-0 lg:mr-48">
+      <div>
+        <div class="flex space-x-2">
+          <h3 class="text-xl font-extrabold">Salary Level</h3>
+          <div class="flex items-center justify-between">
+            <button class="mr-2" (click)="toggleSortOrderForSalary()">
+              <i [class]="sortOrder === 'asc' ? 'pi pi-sort-amount-up-alt' : 'pi pi-sort-amount-down'"></i>
+            </button>
+          </div>
+        </div>
+        <div class="pt-5">
+          <div class="flex-row items-center flex-nowrap gap-3 space-y-3">
+            <div *ngFor="let salary of salaries" class="field-checkbox">
+              <p-radioButton [inputId]="salary.key" name="salary" [value]="salary.key" [(ngModel)]="selectedSalary">
+              </p-radioButton>
+              <label [for]="salary.key" class="ml-2">From {{ salary.key | number }}</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="flex-row justify-center flex-wrap p-4 flex-grow">
+      <vacancy-card *ngFor="let vacancy of (vacancies | async) ?? []" [vacancy]="vacancy"></vacancy-card>
+      <p-paginator (onPageChange)="onPageChange($event)" [first]="pagination?.startIndex ?? 1"
+        [rows]="pagination?.size ?? 5" [totalRecords]="pagination?.length ?? 10"
+        [rowsPerPageOptions]="[5, 10, 15, 20, 25, 30]"></p-paginator>
+    </div>
   </div>
-
-  <div class="">Content</div>
 </div>

@@ -21,6 +21,7 @@ import { MessageService } from 'primeng/api';
 import { MessagesModule } from 'primeng/messages';
 import { MessageModule } from 'primeng/message';
 import { ToastModule } from 'primeng/toast';
+import { provideAuth } from './modules/auth/guards/auth.provider';
 
 @NgModule({
   declarations: [
