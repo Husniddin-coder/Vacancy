@@ -1,0 +1,52 @@
+<div class="flex flex-col custom sm:flex-row md:items-start sm:justify-center md:justify-start flex-auto min-w-0">
+  <!-- Left side form -->
+  <div
+    class="md:flex md:items-center md:justify-end w-full sm:w-auto md:h-full md:w-1/2 py-8 px-4 sm:p-12 md:p-16 sm:rounded-2xl md:rounded-none sm:shadow md:shadow-none sm:bg-card">
+    <div class="w-full max-w-80 sm:w-80 mx-auto sm:mx-0">
+      <div class="text-4xl font-extrabold tracking-tight leading-tight pt-16">
+        Sign up
+      </div>
+      <div class="flex items-baseline mt-0.5 font-medium">
+        <div>
+          Already have an account?
+        </div>
+        <a class="ml-1 text-primary-500 hover:underline" href="sign-in">Sign In</a>
+      </div>
+      <form class="mt-8 w-full space-y-2" (keyup.enter)="signUp()" [formGroup]="signUpForm">
+
+        <label for="username" class="font-bold block"> Username </label>
+        <input class="w-full" type="text" pInputText formControlName="username" />
+
+        <label for="email" class="font-bold block"> Email </label>
+        <input class="w-full" type="email" pInputText formControlName="email" />
+
+        <label for="password" class="font-bold block mb-2"> Password </label>
+        <p-password styleClass="w-full pt-2" [toggleMask]="true" formControlName="password">
+        </p-password>
+
+        <p-checkbox class="pt-3" (onChange)="onEmployerChange($event)" formControlName="isEmployer" value=""
+          inputId="isEmployer">
+        </p-checkbox>
+        <label class="ml-3" for="isEmployer">Are you Empoyer ?</label>
+
+        <ng-container *ngIf="isEmployer">
+          <label for="company" class="font-bold block"> Company </label>
+          <input class="w-full" type="text" pInputText formControlName="company" />
+
+          <label for="region" class="font-bold block"> Region </label>
+          <input class="w-full" type="text" pInputText formControlName="region" />
+        </ng-container>
+
+        <p-button (onClick)="signUp()" styleClass="w-full bg-slate-800" label="Sign up"></p-button>
+      </form>
+    </div>
+  </div>
+  <!-- Right side -->
+  <div
+    class="relative hidden md:flex flex-auto items-center justify-center w-1/2 h-{{isEmployer == true ? 'auto' : 'screen'}} p-16 lg:px-28 overflow-hidden bg-gray-800 dark:border-l">
+    <div>
+      <p class="text-4xl font-extrabold text-white">New Vacancies</p>
+    </div>
+  </div>
+</div>
+<p-toast></p-toast>

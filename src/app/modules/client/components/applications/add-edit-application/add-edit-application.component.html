@@ -1,0 +1,36 @@
+<p-dialog header="Header" [(visible)]="visible" styleClass="w-[95%] sm:max-w-[700px]" (onHide)="close()">
+  <ng-template pTemplate="header">
+    <span class="text-xl font-bold">{{isAdd ? 'Add Application' : 'Edit Application'}}</span>
+  </ng-template>
+  <div class="card flex justify-center p-4">
+    <form class="flex flex-col w-full text-slate-900 font-semibold" [formGroup]="applicationForm">
+      <div class="flex flex-col sm:flex-row py-4 gap-4">
+        <div class="flex flex-col w-full sm:w-1/2 gap-2">
+          <label for="fullname">Full Name</label>
+          <input type="text" id="fullname" pInputText formControlName="fullName"
+            class="p-inputtext p-component w-full" />
+          <label for="phone">Phone Number</label>
+          <p-inputMask mask="(99) 999-9999" id="phone" placeholder="(99) 999-9999" formControlName="phoneNumber"
+            class="w-full"></p-inputMask>
+        </div>
+        <div class="flex flex-col w-full sm:w-1/2 gap-2">
+          <label for="email">Email</label>
+          <input type="text" id="email" pInputText formControlName="email" class="p-inputtext p-component w-full" />
+          <label for="address">Address</label>
+          <input type="text" id="address" pInputText formControlName="address" class="p-inputtext p-component w-full" />
+        </div>
+      </div>
+      <div class="space-y-2">
+        <label class="mt-2" for="fullname">Passport File</label>
+        <div class="card flex justify-content-center">
+          <p-fileUpload mode="advanced" name="demo[]" accept="image/*" (onSelect)="onUpload($event)" [auto]="true"
+            chooseLabel="Upload"></p-fileUpload>
+        </div>
+      </div>
+    </form>
+  </div>
+  <ng-template pTemplate="footer">
+    <p-button icon="pi pi-check" (click)="addEdit()" label="{{isAdd ? 'Add' : 'Edit'}}" styleClass="p-button-text">
+    </p-button>
+  </ng-template>
+</p-dialog>

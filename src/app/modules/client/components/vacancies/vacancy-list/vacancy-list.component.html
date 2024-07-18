@@ -1,0 +1,80 @@
+<div class="ml-6 mr-6 mt-6 lg:ml-24 sm:mr-16 sm:ml-16 lg:mt-10">
+  <div class="block">
+    <h1 class="text-2xl lg:text-3xl font-extrabold text-slate-900">
+      All Vacancies: {{(totalVacancies$ | async)}}
+    </h1>
+    <div class="mt-6 mb-6 lg:mt-10 lg:mb-10">
+      <form class="flex flex-wrap gap-2" [formGroup]="formGroup">
+        <p-multiSelect (onChange)="collectAsString(this.formGroup.get('selectedRegions')?.value, 'region')"
+          class="w-full sm:w-auto text-sm" styleClass="w-full sm:w-64" defaultLabel="Select a Region"
+          [options]="(regionNames$ | async) ?? []" formControlName="selectedRegions" optionLabel="name">
+          <ng-template pTemplate="header">
+            <div class="flex items-center justify-between">
+              <button class="mr-2" (click)="toggleSortOrderForRegion()">
+                <i [class]="sortOrderForRegion === 'asc' ? 'pi pi-sort-amount-up-alt' : 'pi pi-sort-amount-down'"></i>
+              </button>
+            </div>
+          </ng-template>
+        </p-multiSelect>
+        <p-multiSelect class="w-full sm:w-auto text-sm lg:mt-0" styleClass="w-full sm:w-64"
+          defaultLabel="Select a Company" [options]="(companyNames$ | async) ?? []" formControlName="selectedCompanies"
+          optionLabel="name" (onChange)="collectAsString(formGroup.get('selectedCompanies')?.value, 'company')">
+          <ng-template pTemplate="header">
+            <div class="flex items-center justify-between">
+              <button class="mr-2" (click)="toggleSortOrderForCompany()">
+                <i [class]="sortOrderForCompany === 'asc' ? 'pi pi-sort-amount-up-alt' : 'pi pi-sort-amount-down'"></i>
+              </button>
+            </div>
+          </ng-template>
+        </p-multiSelect>
+        <div class="flex w-full justify-content-center">
+          <p-dropdown (onChange)="filterSalary($event.value.key)" class="w-full text-sm sm:w-auto md:hidden"
+            styleClass="w-full sm:w-auto" [options]="salaries" placeholder="Salary filter" [editable]="true"
+            optionLabel="name">
+            <ng-template pTemplate="header">
+              <div class="flex items-center justify-between">
+                <button class="mt-5 ml-5" (click)="toggleSortOrderForSalary()">
+                  <i [class]="sortOrderForSalary === 'asc' ? 'pi pi-sort-amount-up-alt' : 'pi pi-sort-amount-down'"></i>
+                </button>
+              </div>
+            </ng-template>
+          </p-dropdown>
+        </div>
+      </form>
+    </div>
+    <p-divider></p-divider>
+  </div>
+  <div class="flex mt-8">
+    <div class="hidden md:block sm:w-[350px] mt-5">
+      <div>
+        <div class="flex space-x-2">
+          <h3 class="text-xl font-extrabold">Salary Level</h3>
+          <div class="flex items-center justify-between">
+            <button class="mr-2" (click)="toggleSortOrderForSalary()">
+              <i [class]="sortOrderForSalary === 'asc' ? 'pi pi-sort-amount-up-alt' : 'pi pi-sort-amount-down'"></i>
+            </button>
+          </div>
+        </div>
+        <div class="pt-5">
+          <div class="flex-row items-center flex-nowrap gap-3">
+            <form class=" space-y-3" [formGroup]="formGroup">
+              <div *ngFor="let salary of salaries" class="field-checkbox">
+                <p-radioButton (onClick)="filterSalary(salary.key)" formControlName="salary" [inputId]="salary.key"
+                  name="salary" [value]="salary.key">
+                </p-radioButton>
+                <label [for]="salary.key" class="ml-2">From {{ salary.key | number }}</label>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="flex-col justify-center w-full">
+      <vacancy-card class="mx-5" *ngFor="let vacancy of (vacancies | async) ?? []" [vacancy]="vacancy"></vacancy-card>
+      <p-paginator (onPageChange)="onPageChange($event)" [first]="pagination?.startIndex ?? 1"
+        [rows]="pagination?.size ?? 5" [totalRecords]="pagination?.length ?? 10"
+        [rowsPerPageOptions]="[5, 10, 15, 20, 25, 30]"></p-paginator>
+    </div>
+  </div>
+</div>
+<p-toast></p-toast>

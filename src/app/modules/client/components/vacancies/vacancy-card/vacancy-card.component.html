@@ -1,0 +1,22 @@
+<div class="w-full">
+  <p-card header="{{vacancy.title}}">
+    <div class="flex justify-between items-start">
+      <div class="flex flex-col gap-5">
+        <div class="space-y-2">
+          <p class="text-xl">Salary: {{vacancy.salary | number}}</p>
+          <p>Company: {{vacancy.company}}</p>
+          <p>Region: {{vacancy.region}}</p>
+        </div>
+        <p-button (onClick)="showDialog(vacancy.id, vacancy.applicationId == null ? 'Apply' : 'See')"
+          label="{{vacancy.applicationId == null ? 'Apply' : 'See your Application'}}"
+          styleClass="p-button-raised h-10">
+        </p-button>
+      </div>
+      <div class="">
+        <p-button icon="pi pi-bookmark" p-button-outlined styleClass="p-button-rounded p-button-danger p-button-text">
+        </p-button>
+      </div>
+    </div>
+  </p-card>
+</div>
+<add-edit-application [(visible)]="visible"></add-edit-application>
