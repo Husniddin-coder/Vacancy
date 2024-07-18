@@ -42,7 +42,8 @@ import { PaginatorModule } from 'primeng/paginator';
     DividerModule,
     TagModule,
     DropdownModule,
-    PaginatorModule
+    PaginatorModule,
+    ToastModule
   ],
   exports: [
     AddEditApplicationComponent

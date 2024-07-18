@@ -111,10 +111,7 @@ export class AuthService {
 
         // Check if the refresh token is expired
         if (expiredDate.getTime() < now) {
-            return this.signInUsingToken().pipe(
-                switchMap(() => of(false)),
-                catchError(() => of(false))
-            );
+            return of(false);
         }
 
         // Check if the access token exists
@@ -124,7 +121,10 @@ export class AuthService {
 
         // Check if the access token is expired
         if (JWTService.isTokenExpired(this.accessToken)) {
-            return of(false)
+            return this.signInUsingToken().pipe(
+                switchMap(() => of(true)),
+                catchError(() => of(false))
+            );
         }
 
         // If not authenticated, return false

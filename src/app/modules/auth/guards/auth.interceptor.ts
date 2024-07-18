@@ -24,6 +24,7 @@ export const authInterceptor = (req: HttpRequest<unknown>, next: HttpHandlerFn):
         });
     }
 
+
     // Response
     return next(newReq).pipe(
         catchError((error) => {

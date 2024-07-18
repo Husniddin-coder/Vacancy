@@ -2,9 +2,10 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ApplicationService } from '../services/application.service';
 import { Observable, Subject, take, takeUntil } from 'rxjs';
 import { ApplicationGetDto, ApplicationPagination, ApplicationStatus, appStatus } from '../application.type/application.type';
-import { SortEvent } from 'primeng/api';
+import { MessageService, SortEvent } from 'primeng/api';
 import { TablePageEvent } from 'primeng/table';
 import { PaginatorState } from 'primeng/paginator';
+import { LowerCasePipe } from '@angular/common';
 
 @Component({
   selector: 'app-application-list',
@@ -16,12 +17,15 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
   private _unsubscribeAll: Subject<any> = new Subject<any>();
   applications!: Observable<ApplicationGetDto[]>;
   apps: ApplicationGetDto[] = []
-  selectedApplications!: ApplicationGetDto;
+  selectedApplications: ApplicationGetDto[] = [];
   allStatus: string[] = []
   selectedStatus!: appStatus
-  pagination!: ApplicationPagination | null
+  pagination!: ApplicationPagination | null;
+  isShowDelete: boolean = false;
 
-  constructor(private applicationService: ApplicationService) {
+  constructor(
+    private applicationService: ApplicationService,
+    private messageService: MessageService) {
 
   }
 
@@ -56,11 +60,10 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
 
   isAsc: boolean = true;
   customSort(sort: string) {
-    console.log(sort);
-
-    this.applicationService.getAll({ page: 0, size: 10, sort: this.selectedStatus?.name == 'All' || this.selectedStatus == undefined ? 'status' : ('status: ' + this.selectedStatus.name), order: sort + (this.isAsc ? ':asc' : ':desc'), search: '' })
+    this.applicationService.getAll({ page: this.pagination?.page, size: this.pagination?.size, sort: this.selectedStatus?.name == 'All' || this.selectedStatus == undefined ? 'status' : ('status: ' + this.selectedStatus.name), order: sort + (this.isAsc ? ':asc' : ':desc'), search: '' })
       .pipe(take(1), takeUntil(this._unsubscribeAll))
       .subscribe();
+    this.isAsc = !this.isAsc
   }
 
   searchApplications(query: string) {
@@ -88,8 +91,8 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
 
   filterApplication() {
     this.applicationService.getAll({
-      page: 0,
-      size: 10,
+      page: this.pagination?.page,
+      size: this.pagination?.size,
       sort: this.selectedStatus.name == 'All' ? 'status' : ('status: ' + this.selectedStatus.name),
       order: 'status: asc', search: ''
     })
@@ -108,9 +111,40 @@ export class ApplicationListComponent implements OnInit, OnDestroy {
       .subscribe();
   }
 
-  showDelete(){
-    console.log('show');
-    
+  showDelete() {
+    console.log(this.selectedApplications);
+
+    if (this.selectedApplications.length === 0 || this.selectedApplications == null) {
+      this.isShowDelete = false;
+      return;
+    }
+
+    this.isShowDelete = true
+  }
+
+  DeleteApplications() {
+    var ids: number[] = []
+    this.selectedApplications.map((application) => {
+      ids.push(application.id)
+    })
+    this.applicationService.deleteBulk(ids)
+      .subscribe(
+        () => {
+          this.onSuccess('Success', 'Deleted successfully')
+          this.applicationService.getAll({ page: this.pagination?.page, size: this.pagination?.size, sort: 'status', order: 'status: asc', search: '' })
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe();
+        },
+        (error) => this.onError('Deletion failed')
+      )
+  }
+
+  private onSuccess(summary: string, detail: string): void {
+    this.messageService.add({ severity: 'success', summary: summary, detail: detail, life: 2000 });
+  }
+
+  private onError(detail: string): void {
+    this.messageService.add({ severity: 'error', summary: 'Error', detail: detail });
   }
 
   ngOnDestroy(): void {

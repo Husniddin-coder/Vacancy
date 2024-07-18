@@ -141,6 +141,28 @@ export class ApplicationService {
             )
         )
     }
+
+    deleteBulk(ids: number[]): Observable<boolean> {
+        return this.applications$.pipe(
+            take(1),
+            switchMap((applications) =>
+                this.base$.deleteBulk<boolean>('Application/DeleteApplications', ids).pipe(
+                    map((isDeleted) => {
+
+                        ids.forEach(id => {
+                            const index = applications.findIndex(x => x.id == id);
+                            applications.splice(index, 1);
+                        })
+
+                        this._applications.next(applications)
+
+                        return isDeleted
+                    })
+                )
+            )
+        )
+    }
+
     setVacancyListComponent(component: ApplicationListComponent): void {
         this.applicationListComponent = component;
     }

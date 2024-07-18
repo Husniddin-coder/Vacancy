@@ -6,6 +6,7 @@ import { ApplicationService } from '../services/application.service';
 import { map, Subject, takeUntil } from 'rxjs';
 import { UserService } from 'src/app/modules/auth/user/user.service';
 import { UploadEvent } from 'primeng/fileupload';
+import { VacancyService } from '../../vacancies/services/vacancy.service';
 
 @Component({
   selector: 'add-edit-application',
@@ -27,7 +28,8 @@ export class AddEditApplicationComponent implements OnInit, OnDestroy {
   constructor(
     private messageService: MessageService,
     private applicationService: ApplicationService,
-    private userService: UserService) {
+    private userService: UserService,
+    private vacancyService: VacancyService) {
   }
 
   ngOnInit(): void {
@@ -90,7 +92,12 @@ export class AddEditApplicationComponent implements OnInit, OnDestroy {
       .pipe(
         takeUntil(this._unsubscribeAll),
       ).subscribe(
-        () => this.onSuccess('Success', 'Application successfully created'),
+        () => {
+          this.onSuccess('Success', 'Application successfully created')
+          this.vacancyService.getAll({ page: 0, size: 10, sort: 'company', order: 'company: asc', search: '' })
+            .pipe(takeUntil(this._unsubscribeAll))
+            .subscribe();
+        },
         (response) => this.onError(response.error.message)
       )
   }
@@ -102,7 +109,12 @@ export class AddEditApplicationComponent implements OnInit, OnDestroy {
     this.applicationService.updateApplication(applicationId, formData).pipe(
       takeUntil(this._unsubscribeAll)
     ).subscribe(
-      () => this.onSuccess('Success', 'Application updated successfully'),
+      () => {
+        this.onSuccess('Success', 'Application updated successfully')
+        this.vacancyService.getAll({ page: 0, size: 10, sort: 'company', order: 'company: asc', search: '' })
+          .pipe(takeUntil(this._unsubscribeAll))
+          .subscribe();
+      },
       () => this.onError('Failed to update application')
     );
   }

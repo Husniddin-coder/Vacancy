@@ -5,16 +5,22 @@
       <h1 class="text-2xl lg:text-3xl font-extrabold text-slate-900">Your Applications: {{totalApplications$ | async}}
       </h1>
     </div>
-    <div class="w-full sm:w-64 card flex justify-content-center">
-      <p-dropdown (onChange)="filterApplication()" styleClass="w-full sm:w-[200px] h-10"
-        [options]="(allStatus$ | async) ?? []" [(ngModel)]="selectedStatus" placeholder="Select a status"
-        [editable]="true" optionLabel="name"></p-dropdown>
+    <div class="flex">
+      <div class="w-full sm:w-56 card flex justify-content-center">
+        <p-dropdown (onChange)="filterApplication()" styleClass="w-full sm:w-[200px] h-10"
+          [options]="(allStatus$ | async) ?? []" [(ngModel)]="selectedStatus" placeholder="Select a status"
+          [editable]="true" optionLabel="name"></p-dropdown>
+      </div>
+      <div class="card flex space-x-1 justify-content-center">
+        <p-button *ngIf="isShowDelete" (onClick)="DeleteApplications()" label="Delete" styleClass="p-button-danger h-10"></p-button>
+      </div>
     </div>
   </div>
   <p-divider></p-divider>
 
-  <p-table [value]="(applications$ | async) ?? []" (onRowSelect)="showDelete()" [(selection)]="selectedApplications"
-    dataKey="id" [tableStyle]="{'min-width': '50rem'}">
+  <p-table [value]="(applications$ | async) ?? []" (onHeaderCheckboxToggle)="showDelete()" (onRowSelect)="showDelete()"
+    (onRowUnselect)="showDelete()" [(selection)]="selectedApplications" dataKey="id"
+    [tableStyle]="{'min-width': '50rem'}">
     <ng-template pTemplate="header">
       <tr>
         <th style="width: 4rem">
@@ -52,3 +58,4 @@
     </p-paginator>
   </div>
 </div>
+<p-toast></p-toast>

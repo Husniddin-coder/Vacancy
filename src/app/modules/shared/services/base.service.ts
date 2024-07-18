@@ -41,4 +41,7 @@ export class BaseService {
 
     delete = <T>(url: string, id: number) =>
         this.http.delete<T>(this.MakeUrl(`${url}/${id}`));
+
+    deleteBulk = <T>(url: string, ids: number[]) =>
+        this.http.delete<T>(this.MakeUrl(url), { body: { ids } });
 }
