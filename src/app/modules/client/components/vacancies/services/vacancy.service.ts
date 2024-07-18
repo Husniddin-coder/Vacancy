@@ -3,11 +3,14 @@ import { BehaviorSubject, Observable, shareReplay, tap } from 'rxjs';
 import { BaseService } from 'src/app/modules/shared/services/base.service';
 import { VacancyGetDto, VacancyPagination } from '../vacancy-type/vacancy.type';
 import { Params } from '@angular/router';
+import { VacancyListComponent } from '../vacancy-list/vacancy-list.component';
 
 @Injectable({ providedIn: 'root' })
 export class VacancyService {
 
     constructor(private base$: BaseService) { }
+
+    private vacancyListComponent!: VacancyListComponent;
 
     private _pagination: BehaviorSubject<VacancyPagination | null> =
         new BehaviorSubject<VacancyPagination | null>(null);
@@ -58,6 +61,14 @@ export class VacancyService {
                         this._total.next(response.total)
                 }),
                 shareReplay(1))
+    }
+
+    setVacancyListComponent(component: VacancyListComponent): void {
+        this.vacancyListComponent = component;
+    }
+
+    getVacancyListComponent(): VacancyListComponent {
+        return this.vacancyListComponent;
     }
 
 }

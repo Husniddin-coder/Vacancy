@@ -8,19 +8,19 @@ import { SignUpComponent } from './modules/auth/components/sign-up/sign-up.compo
 
 const routes: Routes = [
 
-  { path: '', redirectTo: 'client', pathMatch: 'full' },
+  { path: '', redirectTo: 'client/vacancy-list', pathMatch: 'full' },
 
   //client side
   {
     path: 'client',
-    data: { permissions: [1303] },
+    data: { permissions: [1303,1301] },
     canActivate: [AuthGuard],
     loadChildren: () => import('./modules/client/client.module').then(m => m.ClientModule)
   },
 
   { path: 'sign-in', component: SignInComponent },
   { path: 'sign-up', component: SignUpComponent },
-  { path: 'signed-in-redirect', redirectTo: 'client', pathMatch: 'full' },
+  { path: 'signed-in-redirect', redirectTo: 'client/vacancy-list', pathMatch: 'full' },
 
   //admin side
   {

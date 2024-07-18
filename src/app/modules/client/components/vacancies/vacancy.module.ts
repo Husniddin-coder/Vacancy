@@ -9,12 +9,15 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { DividerModule } from 'primeng/divider';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { CheckboxModule } from 'primeng/checkbox';
 import { CardModule } from 'primeng/card';
 import { PaginatorModule } from 'primeng/paginator';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { ToggleButtonModule } from 'primeng/togglebutton';
+import { ApplicationsModule } from '../applications/applications.module';
+import { DropdownModule } from 'primeng/dropdown';
+import { ToastModule } from 'primeng/toast';
 
 
 @NgModule({
@@ -35,7 +38,10 @@ import { ToggleButtonModule } from 'primeng/togglebutton';
     CardModule,
     PaginatorModule,
     RadioButtonModule,
-    ToggleButtonModule
+    ToggleButtonModule,
+    DropdownModule,
+    ToastModule,
+    ApplicationsModule
   ]
 })
 export class VacancyModule { }

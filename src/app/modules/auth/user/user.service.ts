@@ -17,10 +17,13 @@ export class UserService {
     set user(value: User) {
         value.image = environment.BASE_URL + value?.image ?? ''
         this._user.next(value);
+        console.log(value);
+
     }
 
     get user$(): Observable<User> {
         return this._user.asObservable();
+
     }
 
     getUser = (): Observable<User> =>

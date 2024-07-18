@@ -1,18 +1,28 @@
-<header>
-  <div class="flex justify-between bg-white text-blue p-1 ml-20 mr-20 text-lg">
+<header class="w-full">
+  <div class="flex justify-between bg-white text-blue p-1 ml-20 mr-10 text-lg">
     <p-button label="Region" styleClass="p-button-info p-button-text h-10">
     </p-button>
-    <p-button (onClick)="SearchChange()" enter label="Job Search" styleClass="p-button-info p-button-text h-10">
-    </p-button>
+    <div>
+      <p-button class="min-w-fit" (onClick)="SearchChange()" label="Job Search"
+        styleClass="p-button-info p-button-text h-10">
+      </p-button>
+      <p-button icon="pi pi-sign-out" class="min-w-fit" (onClick)="signOut()" label="Log Out"
+        styleClass="p-button-info p-button-text h-10 text-red-500">
+      </p-button>
+    </div>
   </div>
   <nav class="flex bg-slate-900 text-white p-2 h-20 items-center">
     <div class="flex items-center justify-between w-full px-5 md:px-20">
-      <div class="flex items-center space-x-8 md:space-x-8 text-lg">
-        <p-tabMenu (activeItemChange)="ChangeItemsLeft($event)" [model]="itemsLeft" [(activeItem)]="activeItemLeft">
+      <div class="sm:hidden card flex justify-content-center">
+        <p-menu #menu [model]="items" [popup]="true"></p-menu>
+        <button pButton type="button" (click)="menu.toggle($event)" icon="pi pi-bars" label=""></button>
+      </div>
+      <div class="hidden sm:flex items-center space-x-8 md:space-x-8 text-lg">
+        <p-tabMenu [model]="itemsLeft" [(activeItem)]="activeItemLeft">
         </p-tabMenu>
       </div>
-      <div class="flex items-center space-x-5 text-lg">
-        <p-tabMenu (activeItemChange)="ChangeItemsRight($event)" [model]="itemsRight" [(activeItem)]="activeItemRight">
+      <div class="ml-auto sm:flex items-center space-x-5 text-lg">
+        <p-tabMenu [model]="itemsRight" [(activeItem)]="activeItemRight">
         </p-tabMenu>
       </div>
     </div>
@@ -21,9 +31,9 @@
 <ng-container *ngIf="isSearched">
   <div class="flex p-2">
     <div class="w-full card flex items-center justify-center px-4 mt-1 pl-9 pr-10 space-x-2">
-      <input type="text" placeholder="search by company, region" pInputText formControlName="text"
+      <input type="text" placeholder="search by title, company, region" #searchInput pInputText formControlName="text"
         class="px-9 py-2 sm:w-full lg:w-1/2 rounded-lg border-slate-300 focus:border-primary-color focus:outline-none focus:ring focus:ring-primary-color focus:ring-opacity-50" />
-      <p-button label="Search" styleClass="p-button-raised p-button-info">
+      <p-button (onClick)="search(searchInput.value)" label="Search" styleClass="p-button-raised p-button-info">
       </p-button>
     </div>
   </div>

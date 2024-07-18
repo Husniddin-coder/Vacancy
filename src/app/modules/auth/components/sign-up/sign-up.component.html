@@ -12,7 +12,7 @@
         </div>
         <a class="ml-1 text-primary-500 hover:underline" href="sign-in">Sign In</a>
       </div>
-      <form class="mt-8 w-full space-y-2" [formGroup]="signUpForm">
+      <form class="mt-8 w-full space-y-2" (keyup.enter)="signUp()" [formGroup]="signUpForm">
 
         <label for="username" class="font-bold block"> Username </label>
         <input class="w-full" type="text" pInputText formControlName="username" />

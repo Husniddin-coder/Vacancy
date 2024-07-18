@@ -26,6 +26,7 @@ export interface VacancyGetDto extends Id {
     company: string;
     workingDays: string;
     qualificationRequirements: string;
+    applicationId?: number;
     jobStartDate: string;
 }
 

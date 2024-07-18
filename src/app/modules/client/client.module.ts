@@ -7,24 +7,27 @@ import { HeaderComponent } from './components/header/header.component';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { TabMenuModule } from 'primeng/tabmenu';
-import { VacancyListComponent } from './components/vacancies/vacancy-list/vacancy-list.component';
-import { VacancyCardComponent } from './components/vacancies/vacancy-card/vacancy-card.component';
 import { ApplicationListComponent } from './components/applications/application-list/application-list.component';
-
+import { ApplicationsModule } from './components/applications/applications.module';
+import { VacancyModule } from './components/vacancies/vacancy.module';
+import { MenuModule } from 'primeng/menu';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
 
 @NgModule({
   declarations: [
     ClientComponent,
     HeaderComponent,
-    ApplicationListComponent,
-
   ],
   imports: [
     CommonModule,
     ClientRoutingModule,
+    ApplicationsModule,
+    VacancyModule,
     ButtonModule,
     InputTextModule,
-    TabMenuModule
+    TabMenuModule,
+    MenuModule,
+    OverlayPanelModule
   ]
 })
 export class ClientModule { }
